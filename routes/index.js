@@ -10,7 +10,7 @@ router.get('/headlines', async (req, res) => {
     const html = await response.text();
     const $ = cheerio.load(html);
     const headlines = [];
-    $('.max-w-content-block-standard').each((index, element) => {
+    $('.max-w-content-block-standard, .max-w-content-block-mobile').each((index, element) => {
       const titleElement = $(element).find('h2 a');
       const title = titleElement.text();
       const relativeUrl = titleElement.attr('href');
@@ -19,6 +19,7 @@ router.get('/headlines', async (req, res) => {
       const date = new Date(dateString);
       headlines.push({ title, url: absoluteUrl, date });
     });
+    headlines.sort((a, b) => b.date - a.date);
     res.render('index', { title: 'Headlines', headlines });
   } catch (error) {
     console.error('Error fetching headlines:', error.message);
