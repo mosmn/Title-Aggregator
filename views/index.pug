@@ -3,3 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  each headline in headlines
+    h2
+      a(href=headline.url)= headline.title
+    p= headline.date.toISOString().slice(0, 10)
